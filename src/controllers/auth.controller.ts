@@ -67,8 +67,6 @@ export default {
 		try {
 			const token = req.header("Authorization")?.split(" ")[1];
 			if (!token) return response(res, 401, "Authentication is required");
-			const isTokenInvalid = await prisma.tokenBlacklist.findUnique({ where: { token } });
-			if (isTokenInvalid) return response(res, 403, "Invalid token");
 			await prisma.tokenBlacklist.create({ data: { token } });
 			response(res, 200, "Successfully logged out");
 		} catch (error) {

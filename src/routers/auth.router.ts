@@ -5,8 +5,8 @@ import isAuthenticated from "../middlewares/isAuthenticated";
 
 const authRouter: Router = Router();
 
-authRouter.post("/api/v1/login", authController.login);
-authRouter.post("/api/v1/register", authController.register);
-authRouter.delete("/api/v1/logout",isAuthenticated ,authController.logout);
+authRouter.post("/login", authController.login);
+authRouter.post("/register", authController.register);
+authRouter.delete("/logout", isAuthenticated, authController.logout);
 
 export default authRouter;

@@ -6,8 +6,8 @@ import userRouter from "./user.router";
 
 const mainRouter: Router = Router();
 
-mainRouter.use(authRouter);
-mainRouter.use(userRouter);
+mainRouter.use("/api/v1/auth", authRouter);
+mainRouter.use("/api/v1/user", userRouter);
 
 mainRouter.get("/", async (req: Request, res: Response) => {
 	response(res, 200, "OK", {

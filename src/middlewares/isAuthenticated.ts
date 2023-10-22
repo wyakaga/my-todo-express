@@ -22,9 +22,9 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction) 
 
 	if (!token) return response(res, 403, "Access Denied");
 
-	const isTokenValid = await prisma.tokenBlacklist.findUnique({ where: { token } });
+	const isTokenInvalid = await prisma.tokenBlacklist.findUnique({ where: { token } });
 
-	if (!isTokenValid) return response(res, 403, "Invalid token");
+	if (isTokenInvalid) return response(res, 403, "Invalid token");
 
 	jwt.verify(token, env.JWT_SECRET, (error, payload) => {
 		if (error && error.name) return response(res, 403, error.message);

@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 
 import prisma from "../configs/prisma.config";
 import response from "../utils/response";
+import { JwtPayload } from "jsonwebtoken";
 
 export default {
 	readSingle: async (req: Request, res: Response) => {
 		try {
-			const id = Number(req.params.id);
+			const id = Number((req.authInfo as JwtPayload).userId);
 			const data = await prisma.user.findUnique({
 				where: { id },
 				select: {
@@ -26,7 +27,7 @@ export default {
 	},
 	update: async (req: Request, res: Response) => {
 		try {
-			const id = Number(req.params.id);
+			const id = Number((req.authInfo as JwtPayload).userId);
 			const { firstName, lastName }: { firstName: string; lastName: string } = req.body;
 
 			const checkUser = await prisma.user.findUnique({ where: { id } });
