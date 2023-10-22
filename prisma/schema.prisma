@@ -36,7 +36,7 @@ model Todo {
 
 model TokenBlacklist {
   id          Int       @id @default(autoincrement())
-  token       String    @db.VarChar()
+  token       String    @db.VarChar(255) @unique
   createdAt   DateTime  @default(now()) @db.Timestamptz()
   updatedAt   DateTime  @updatedAt @db.Timestamptz()
 }
