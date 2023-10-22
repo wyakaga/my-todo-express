@@ -63,4 +63,15 @@ export default {
 			response(res, 500, "Internal Server Error", (error as Error).message);
 		}
 	},
+	logout: async (req: Request, res: Response) => {
+		try {
+			const token = req.header("Authorization")?.split(" ")[1];
+			if (!token) return response(res, 401, "Authentication is required");
+			await prisma.tokenBlacklist.create({ data: { token } });
+			response(res, 200, "Successfully logged out");
+		} catch (error) {
+			console.log(error);
+			response(res, 500, "Internal Server Error", (error as Error).message);
+		}
+	},
 };
