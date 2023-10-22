@@ -15,8 +15,8 @@ model User {
   id        Int       @id @default(autoincrement())
   email     String    @db.VarChar(255) @unique
   password  String    @db.VarChar(255)
-  firstName String?    @db.VarChar(255)
-  lastName  String?    @db.VarChar(255)
+  firstName String?   @db.VarChar(255)
+  lastName  String?   @db.VarChar(255)
   todos     Todo[]
   createdAt DateTime  @default(now()) @db.Timestamptz()
   updatedAt DateTime  @updatedAt @db.Timestamptz()

@@ -9,15 +9,14 @@ const main = async () => {
 
 	const amountOfUsers = 3;
 
-	const users: User[] = [];
+	const users: Omit<User, "id">[] = [];
 
-	for (let id = 1; id <= amountOfUsers; id++) {
+	for (let i = 0; i < amountOfUsers; i++) {
 		const firstName = faker.person.firstName();
 		const lastName = faker.person.lastName();
 		const password = bcrypt.hashSync(`${firstName + lastName}`, 10)
 
-		const user: User = {
-			id,
+		const user: Omit<User, "id"> = {
 			email: faker.internet.email({ firstName, lastName }),
 			password,
 			firstName,
