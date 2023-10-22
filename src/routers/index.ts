@@ -1,8 +1,11 @@
 import { Request, Response, Router } from "express";
 
 import response from "../utils/response";
+import authRouter from "./user.router";
 
 const mainRouter: Router = Router();
+
+mainRouter.use(authRouter);
 
 mainRouter.get("/", async (req: Request, res: Response) => {
 	response(res, 200, "OK", {
