@@ -14,11 +14,12 @@ const main = async () => {
 	for (let id = 1; id <= amountOfUsers; id++) {
 		const firstName = faker.person.firstName();
 		const lastName = faker.person.lastName();
+		const password = bcrypt.hashSync(`${firstName + lastName}`, 10)
 
 		const user: User = {
 			id,
 			email: faker.internet.email({ firstName, lastName }),
-			password: bcrypt.hashSync(faker.person.fullName(), 10),
+			password,
 			firstName,
 			lastName,
 			createdAt: faker.date.past(),
