@@ -32,4 +32,35 @@ export default {
 			response(res, 500, "Internal Server Error", (error as Error).message);
 		}
 	},
+	register: async (req: Request, res: Response) => {
+		try {
+			const { email, password }: { email: string; password: string } = req.body;
+
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/gim;
+			const checkUser = await prisma.user.findUnique({ where: { email } });
+
+			if (checkUser) return response(res, 400, "User already registered!");
+			if (!emailRegex.test(email)) return response(res, 403, "Invalid email address!");
+			if (password.length < 6) return response(res, 403, "Password at least has 6 characters!");
+
+			const hashed = bcrypt.hashSync(password, 10);
+
+			const newUser = await prisma.user.create({
+				data: { email, password: hashed },
+				select: {
+					id: true,
+					email: true,
+					firstName: true,
+					lastName: true,
+					createdAt: true,
+					updatedAt: true,
+				},
+			});
+
+			response(res, 201, "Successfully registered!", newUser);
+		} catch (error) {
+			console.log(error);
+			response(res, 500, "Internal Server Error", (error as Error).message);
+		}
+	},
 };
