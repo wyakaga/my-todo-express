@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Todo" ALTER COLUMN "status" SET DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "firstName" DROP NOT NULL,
+ALTER COLUMN "lastName" DROP NOT NULL;
