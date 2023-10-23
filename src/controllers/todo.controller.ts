@@ -191,4 +191,31 @@ export default {
 			response(res, 500, "Internal Server Error", (error as Error).message);
 		}
 	},
+	delete: async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const userId: number = (req.authInfo as JwtPayload).userId;
+
+			const checkTodo = await prisma.todo.findUnique({
+				where: {
+					id: Number(id),
+					userId,
+				},
+			});
+
+			if (!checkTodo) return response(res, 400, "No such data exist");
+
+			const data = await prisma.todo.delete({
+				where: {
+					id: Number(id),
+					userId,
+				},
+			});
+
+			response(res, 200, "Deleted succesfully", data);
+		} catch (error) {
+			console.log(error);
+			response(res, 500, "Internal Server Error", (error as Error).message);
+		}
+	},
 };
