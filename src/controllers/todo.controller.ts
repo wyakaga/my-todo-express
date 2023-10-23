@@ -13,6 +13,7 @@ export default {
 			const userId: number = (req.authInfo as JwtPayload).userId;
 
 			if (!title || !description || !deadline) return response(res, 400, "All fields are required");
+			if (!isValidDate(deadline)) return response(res, 400, "Date input should be in YYYY-MM-DD format")
 
 			const content = {
 				title,
