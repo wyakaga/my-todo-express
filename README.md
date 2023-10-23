@@ -32,6 +32,8 @@ DATABASE_URL ="postgres://postgres:__PASSWORD__@db.__YOUR_SUPABASE_PROJECT__.sup
 
 # Direct connection to the database. Used for migrations.
 DIRECT_URL="postgres://postgres:__PASSWORD__@db.__YOUR SUPABASE_PROJECT__.supabase.co:YOUR_PORT/postgres"
+
+JWT_SECRET=[YOUR JWT SECRET]
 ```
 
 <p>5. Migrate and seed database</p>
