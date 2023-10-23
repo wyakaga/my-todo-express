@@ -9,5 +9,6 @@ todoRouter.post("/", isAuthenticated, todoController.create);
 todoRouter.get("/", isAuthenticated, todoController.readAll);
 todoRouter.get("/:id", isAuthenticated, todoController.readSingle);
 todoRouter.patch("/:id", isAuthenticated, todoController.updateTodo);
+todoRouter.patch("/:id/status", isAuthenticated, todoController.updateStatus);
 
 export default todoRouter;

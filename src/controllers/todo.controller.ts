@@ -13,7 +13,8 @@ export default {
 			const userId: number = (req.authInfo as JwtPayload).userId;
 
 			if (!title || !description || !deadline) return response(res, 400, "All fields are required");
-			if (!isValidDate(deadline)) return response(res, 400, "Date input should be in YYYY-MM-DD format")
+			if (!isValidDate(deadline))
+				return response(res, 400, "Date input should be in YYYY-MM-DD format");
 
 			const content = {
 				title,
@@ -138,11 +139,10 @@ export default {
 			});
 
 			if (!checkTodo) return response(res, 400, "No such data exist");
-			if (!isValidDate(deadline)) return response(res, 400, "Date input should be in YYYY-MM-DD format")
+			if (!isValidDate(deadline))
+				return response(res, 400, "Date input should be in YYYY-MM-DD format");
 
 			const [date] = checkTodo.deadline.toISOString().split("T");
-
-			console.log(typeof deadline)
 
 			const updatedData = {
 				title: String(title) || checkTodo.title,
@@ -153,6 +153,36 @@ export default {
 			const data = await prisma.todo.update({
 				where: { id: Number(id) },
 				data: updatedData,
+			});
+
+			response(res, 200, "Updated succesfully", data);
+		} catch (error) {
+			console.log(error);
+			response(res, 500, "Internal Server Error", (error as Error).message);
+		}
+	},
+	updateStatus: async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const status = Number(req.body.status);
+			const userId: number = (req.authInfo as JwtPayload).userId;
+
+			const checkTodo = await prisma.todo.findUnique({
+				where: {
+					id: Number(id),
+					userId,
+				},
+			});
+
+			if (!checkTodo) return response(res, 400, "No such data exist");
+			if (Number.isNaN(status)) return response(res, 400, "Status should be integer");
+			if (status < 0 || status > 2) {
+				return response(res, 400, "Status ranged from 0 t0 2");
+			}
+
+			const data = await prisma.todo.update({
+				where: { id: Number(id) },
+				data: { status },
 			});
 
 			response(res, 200, "Updated succesfully", data);
