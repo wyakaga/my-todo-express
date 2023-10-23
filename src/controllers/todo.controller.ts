@@ -36,8 +36,8 @@ export default {
 
 			let orderBy: Prisma.TodoOrderByWithRelationInput = { id: "asc" };
 
-			if (req.query.sortBy === "latest") orderBy = { deadline: "asc" };
-			if (req.query.sortBy === "oldest") orderBy = { deadline: "desc" };
+			if (req.query.sortBy === "urgent") orderBy = { deadline: "asc" };
+			if (req.query.sortBy === "trivial") orderBy = { deadline: "desc" };
 
 			const search = req.query.search || "";
 			const limit = Number(req.query.limit) || 10;
