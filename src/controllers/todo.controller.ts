@@ -102,4 +102,24 @@ export default {
 			response(res, 500, "Internal Server Error", (error as Error).message);
 		}
 	},
+	readSingle: async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const userId: number = (req.authInfo as JwtPayload).userId;
+
+			const data = await prisma.todo.findUnique({
+				where: {
+					id: Number(id),
+					userId,
+				},
+			});
+
+			if (!data) return response(res, 404, "Data not found");
+
+			response(res, 200, "OK", data);
+		} catch (error) {
+			console.log(error);
+			response(res, 500, "Internal Server Error", (error as Error).message);
+		}
+	},
 };

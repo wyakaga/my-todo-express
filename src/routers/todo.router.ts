@@ -7,5 +7,6 @@ const todoRouter: Router = Router();
 
 todoRouter.post("/", isAuthenticated, todoController.create);
 todoRouter.get("/", isAuthenticated, todoController.readAll);
+todoRouter.get("/:id", isAuthenticated, todoController.readSingle);
 
 export default todoRouter;
