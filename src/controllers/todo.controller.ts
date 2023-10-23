@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 
 import prisma from "../configs/prisma.config";
 import response from "../utils/response";
+import isValidDate from "../utils/isValidDate";
 
 export default {
 	create: async (req: Request, res: Response) => {
@@ -117,6 +118,43 @@ export default {
 			if (!data) return response(res, 404, "Data not found");
 
 			response(res, 200, "OK", data);
+		} catch (error) {
+			console.log(error);
+			response(res, 500, "Internal Server Error", (error as Error).message);
+		}
+	},
+	updateTodo: async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const { title, description, deadline } = req.body;
+			const userId: number = (req.authInfo as JwtPayload).userId;
+
+			const checkTodo = await prisma.todo.findUnique({
+				where: {
+					id: Number(id),
+					userId,
+				},
+			});
+
+			if (!checkTodo) return response(res, 400, "No such data exist");
+			if (!isValidDate(deadline)) return response(res, 400, "Date input should be in YYYY-MM-DD format")
+
+			const [date] = checkTodo.deadline.toISOString().split("T");
+
+			console.log(typeof deadline)
+
+			const updatedData = {
+				title: String(title) || checkTodo.title,
+				description: String(description) || checkTodo.description,
+				deadline: deadline ? new Date(deadline) : new Date(date),
+			};
+
+			const data = await prisma.todo.update({
+				where: { id: Number(id) },
+				data: updatedData,
+			});
+
+			response(res, 200, "Updated succesfully", data);
 		} catch (error) {
 			console.log(error);
 			response(res, 500, "Internal Server Error", (error as Error).message);
