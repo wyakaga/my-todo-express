@@ -22,4 +22,6 @@ mainRouter.get("/", async (req: Request, res: Response) => {
 	});
 });
 
+mainRouter.all("*", async (req: Request, res: Response) => response(res, 404, "Route not found!"))
+
 export default mainRouter;
